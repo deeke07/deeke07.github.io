@@ -5,6 +5,7 @@ import {
   CalendarDays,
   ChartNoAxesCombined,
   CheckCircle2,
+  ChevronRight,
   Download,
   ExternalLink,
   Globe2,
@@ -22,93 +23,7 @@ import {
   X,
 } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
-
-const projectItems = [
-  {
-    title: 'Ax Secondary',
-    description:
-      'Comprehensive internal CRM platform for real estate agents to manage listings, leads, client interactions, and daily operations efficiently.',
-    stack: ['Kotlin', 'MVVM', 'Room DB', 'Firebase', 'Clean Architecture'],
-    category: 'CRM',
-    features: [
-      'Property listing and lead management',
-      'Contact handling with calendar-based event tracking',
-      'Centralized dashboard for productivity and performance insights',
-    ],
-  },
-  {
-    title: 'Ax Telelog',
-    description:
-      'Enterprise-grade tracking system for agent activity monitoring, compliance, and communication analytics across channels.',
-    stack: ['Kotlin', 'Accessibility Service', 'Room DB', 'Coroutines', 'Flow'],
-    category: 'Automation',
-    features: [
-      'Automatic call recording and call log history',
-      'Periodic location tracking for field teams',
-      'WhatsApp, Telegram, and Botim communication tracking',
-    ],
-  },
-  {
-    title: 'Ax Chat',
-    description:
-      'Scalable real-time messaging app inspired by WhatsApp, focused on business communication and listing collaboration.',
-    stack: ['Kotlin', 'Firebase', 'Coroutines', 'Flow', 'Jetpack Compose'],
-    category: 'Communication',
-    features: [
-      'Real-time messaging with media and file sharing',
-      'Property listing sharing directly in chat',
-      'Reliable communication architecture for high usage',
-    ],
-  },
-  {
-    title: 'Dileep Tailors (100K+ Downloads)',
-    description:
-      'Educational e-commerce app for tailors and learners combining premium tutorials with pattern purchasing in one platform.',
-    stack: ['Kotlin', 'MVVM', 'Firebase', 'Retrofit', 'Room DB'],
-    category: 'E-Learning',
-    features: [
-      'Premium blouse cutting tutorials and HD stitching videos',
-      'Chart pattern purchases integrated inside the app',
-      '100K+ downloads with strong user engagement',
-    ],
-  },
-  {
-    title: 'Mozzingo (Customer + Mechanic Apps)',
-    description:
-      'Dual-app roadside assistance ecosystem enabling instant booking, real-time mechanic discovery, and live tracking.',
-    stack: ['Kotlin', 'Google Maps', 'Firebase', 'Coroutines', 'Hilt'],
-    category: 'Mobility',
-    features: [
-      'Nearby mechanic discovery using live location',
-      'Instant service booking and arrival tracking',
-      'In-app communication, service management, and notifications',
-    ],
-  },
-  {
-    title: 'ParinaySamriddhi',
-    description:
-      'Google Play matrimonial app with intelligent partner discovery, modern profile experience, and built-in communication.',
-    stack: ['Kotlin', 'Jetpack Compose', 'Firebase', 'MVVM', 'Clean Architecture'],
-    category: 'Social',
-    features: [
-      'Advanced profile creation and preference setup',
-      'Smart matchmaking and recommendation flow',
-      'Real-time chat and engagement features',
-    ],
-  },
-  {
-    title: 'Diagnorays',
-    description:
-      'Healthcare diagnostics app for test booking, lab integrations, and real-time tracking of sample collection and delivery workflows.',
-    stack: ['Kotlin', 'Retrofit', 'Firebase', 'Coroutines', 'Flow'],
-    category: 'Healthcare',
-    features: [
-      'Diagnostic test booking through partnered clinical labs',
-      'Real-time tracking of sample collection and delivery agents',
-      'Simple report and scheduling experience for patients',
-    ],
-  },
-]
+import { projectItems } from './data/portfolioData'
 
 const experienceItems = [
   {
@@ -214,6 +129,10 @@ function App() {
   const resumeUrl = '/Deekendra_Resume.pdf'
   const [theme, setTheme] = useState('light')
   const [activeFilter, setActiveFilter] = useState('All')
+  const [activeProject, setActiveProject] = useState(projectItems[0]?.title || 'All')
+  const [selectedProject, setSelectedProject] = useState(projectItems[0] || null)
+  const [carouselIndex, setCarouselIndex] = useState(0)
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -244,6 +163,26 @@ function App() {
     if (activeFilter === 'All') return projectItems
     return projectItems.filter((project) => project.category === activeFilter)
   }, [activeFilter])
+
+  const activeProjectItem = useMemo(
+    () => projectItems.find((project) => project.title === activeProject) || projectItems[0],
+    [activeProject],
+  )
+
+  useEffect(() => {
+    if (
+      activeFilter !== 'All' &&
+      !filteredProjects.some((project) => project.title === activeProject)
+    ) {
+      setActiveProject(filteredProjects[0]?.title || projectItems[0]?.title)
+    }
+  }, [activeFilter, filteredProjects, activeProject])
+
+  useEffect(() => {
+    if (selectedProject) {
+      setCarouselIndex(0)
+    }
+  }, [selectedProject])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -549,121 +488,252 @@ function App() {
         </section>
 
         <section id="experience" className="section-card reveal">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">
-            Experience
-          </p>
-          <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
-            Lead Mobile App Developer Credentials
-          </h2>
-          <h3 className="mt-6 text-xl font-semibold text-slate-900 dark:text-white">Work Experience</h3>
-          <div className="mt-4 space-y-4">
-            {experienceItems.map((item) => (
-              <article key={item.company} className="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{item.role}</h4>
-                  <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                    <CalendarDays size={14} />
-                    {item.period}
-                  </span>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">
+                Experience
+              </p>
+              <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
+                Lead Mobile App Developer Credentials
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
+                I design and ship Android-first solutions that improve agent workflows, manage high-volume data, and keep user experiences fast and reliable.
+              </p>
+            </div>
+            <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-200">
+              5+ years building apps for high-growth teams
+            </div>
+          </div>
+
+          <div className="mt-8 space-y-5">
+            {experienceItems.map((item, index) => (
+              <article
+                key={item.company}
+                className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-50 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-950/60"
+              >
+                <span className="absolute right-5 top-5 rounded-full bg-slate-900/95 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-100 dark:bg-slate-100/10 dark:text-slate-200">
+                  {item.period}
+                </span>
+                <div className="mb-5 flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-[0.21em] text-indigo-600 dark:text-indigo-400">
+                      {item.role}
+                    </p>
+                    <h4 className="mt-2 text-2xl font-semibold text-slate-900 dark:text-white">
+                      {item.company}
+                    </h4>
+                  </div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-indigo-500/10 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-300">
+                    <CheckCircle2 size={20} />
+                  </div>
                 </div>
-                <p className="mt-1 text-sm font-medium text-indigo-600 dark:text-indigo-400">{item.company}</p>
-                <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">{item.summary}</p>
-                <ul className="mt-3 space-y-2">
+                <p className="text-sm leading-7 text-slate-600 dark:text-slate-400">{item.summary}</p>
+                <ul className="mt-5 space-y-3">
                   {item.points.map((point) => (
-                    <li key={point} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      <CheckCircle2 size={15} className="mt-0.5 text-indigo-500" />
+                    <li key={point} className="flex gap-3 text-sm text-slate-600 dark:text-slate-400">
+                      <span className="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
                       <span>{point}</span>
                     </li>
                   ))}
                 </ul>
+                <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                  <span className="inline-flex h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
+                  {index === 0 ? 'Most recent role' : 'Previous role'}
+                </div>
               </article>
             ))}
           </div>
 
-          <h3 className="mt-8 text-xl font-semibold text-slate-900 dark:text-white">Education</h3>
-          <div className="mt-4 space-y-3">
-            {educationItems.map((item) => (
-              <article key={item.degree} className="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{item.degree}</h4>
-                <p className="mt-1 text-sm font-medium text-indigo-600 dark:text-indigo-400">{item.institute}</p>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{item.details}</p>
-                <p className="mt-2 inline-flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                  <GraduationCap size={14} />
-                  {item.period}
+          <div className="mt-10 rounded-[2rem] border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/60">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Education</h3>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                  Academic foundation that supports scalable mobile engineering.
                 </p>
-              </article>
-            ))}
+              </div>
+              <div className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-700 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-200">
+                Verified degree
+              </div>
+            </div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {educationItems.map((item) => (
+                <article
+                  key={item.degree}
+                  className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+                >
+                  <h4 className="text-lg font-semibold text-slate-900 dark:text-white">{item.degree}</h4>
+                  <p className="mt-1 text-sm font-medium text-indigo-600 dark:text-indigo-400">{item.institute}</p>
+                  <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">{item.details}</p>
+                  <p className="mt-4 inline-flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                    <GraduationCap size={14} />
+                    {item.period}
+                  </p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
         <section id="projects" className="section-card reveal">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">
             Portfolio
           </p>
-          <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
-            Check Out Some Of My Works
+          <h2 className="mt-2 text-center text-3xl font-bold text-slate-900 dark:text-slate-100">
+            Featured Projects
           </h2>
-          <p className="mt-3 max-w-4xl text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-3 mx-auto max-w-4xl text-center text-sm text-slate-600 dark:text-slate-400">
             Explore high-impact Android products and production systems across real estate,
             communication, education, healthcare, and mobility.
           </p>
 
-          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Featured Projects</h3>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setActiveFilter(category)}
-                  className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
-                    activeFilter === category
-                      ? 'border-indigo-500 bg-indigo-500 text-white'
-                      : 'border-slate-300 text-slate-600 hover:border-indigo-400 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-300'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+          {/* Category Filter Pills */}
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            {categories.map((category) => (
+              <button
+                key={category}
+                type="button"
+                onClick={() => setActiveFilter(category)}
+                className={`relative overflow-hidden rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 ${
+                  activeFilter === category
+                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30'
+                    : 'border border-slate-300 text-slate-600 hover:border-indigo-400 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-300 dark:hover:border-indigo-500 dark:hover:text-indigo-400'
+                }`}
+              >
+                {category}
+                {activeFilter === category && (
+                  <span className="absolute inset-0 animate-pulse bg-gradient-to-r from-indigo-400 to-purple-400 opacity-20"></span>
+                )}
+              </button>
+            ))}
           </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {filteredProjects.map((project) => (
+          {/* Projects Grid - Modern Card Layout */}
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredProjects.map((project, index) => (
               <article
                 key={project.title}
-                className="rounded-2xl border border-slate-200 p-4 transition duration-300 hover:-translate-y-1 hover:shadow-card dark:border-slate-800"
+                onClick={() => {
+                  setSelectedProject(project)
+                  setCarouselIndex(0)
+                  setIsProjectModalOpen(true)
+                }}
+                className="group relative cursor-pointer overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20 dark:border-slate-800 dark:bg-slate-950"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="relative h-36 overflow-hidden rounded-xl border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-200 dark:border-slate-700 dark:from-slate-900 dark:to-slate-800">
-                  <div className="absolute inset-0 grid place-items-center text-slate-400 dark:text-slate-500">
-                    <ChartNoAxesCombined size={24} />
+                {/* Image Container */}
+                <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-900">
+                  {project.image ? (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800">
+                      <ChartNoAxesCombined size={40} className="text-slate-400" />
+                    </div>
+                  )}
+                  {/* Overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                  
+                  {/* Category Badge */}
+                  <div className="absolute left-4 top-4">
+                    <span className="rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-slate-900 shadow-lg">
+                      {project.category}
+                    </span>
+                  </div>
+                  
+                  {/* View Details Icon */}
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 translate-x-4 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-lg">
+                      <ExternalLink size={18} className="text-indigo-600" />
+                    </div>
                   </div>
                 </div>
-                <h3 className="mt-4 text-xl font-semibold text-slate-900 dark:text-slate-100">
-                  {project.title}
-                </h3>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{project.description}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {project.stack.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300"
-                    >
-                      {item}
-                    </span>
-                  ))}
+
+                {/* Content */}
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-slate-900 transition-colors group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400">
+                    {project.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                    {project.description}
+                  </p>
+                  
+                  {/* Tech Stack Tags */}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {project.stack.slice(0, 3).map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {project.stack.length > 3 && (
+                      <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-slate-500 dark:bg-slate-800 dark:text-slate-500">
+                        +{project.stack.length - 3}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <ul className="mt-4 space-y-1 text-sm text-slate-600 dark:text-slate-400">
-                  {project.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2">
-                      <span className="mt-1 h-2 w-2 rounded-full bg-indigo-500"></span>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+
+                {/* Bottom accent line */}
+                <div className="h-1 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
               </article>
             ))}
           </div>
+
+          {/* View All Projects Button */}
+          <div className="mt-12 text-center">
+            <button
+              type="button"
+              onClick={() => {
+                setActiveFilter('All')
+                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+              className="group inline-flex items-center gap-2 rounded-full border border-slate-300 px-8 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-slate-700 transition-all hover:border-indigo-500 hover:bg-indigo-50 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-300 dark:hover:border-indigo-500 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-400"
+            >
+              View All Projects
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            </button>
+          </div>
+
+          {/* Project Detail Modal */}
+          {isProjectModalOpen && selectedProject ? (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4"
+              onClick={() => setIsProjectModalOpen(false)}
+            >
+              <div
+                className="relative w-full max-w-3xl max-h-[90vh] flex flex-col items-center justify-center overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-slate-950"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Close Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsProjectModalOpen(false)}
+                  className="absolute right-4 top-4 z-20 inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-700 shadow-lg backdrop-blur-sm transition hover:scale-110 hover:bg-indigo-600 hover:text-white dark:border-slate-800 dark:bg-slate-900/90 dark:text-slate-300"
+                  aria-label="Close project details"
+                >
+                  <X size={20} />
+                </button>
+                {/* Only the full image, centered */}
+                {selectedProject.image ? (
+                  <img
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    className="w-full h-auto max-h-[80vh] object-contain rounded-2xl"
+                  />
+                ) : (
+                  <div className="flex h-80 w-full items-center justify-center">
+                    <ChartNoAxesCombined size={48} className="text-slate-400" />
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : null}
         </section>
 
         <section className="section-card reveal">
