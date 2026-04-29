@@ -49,3 +49,7 @@ npm run preview
    - Build command: `npm run build`
    - Publish directory: `dist`
 4. Click deploy.
+
+## Live Site
+
+- Production URL: [https://deekendra-portfolio.vercel.app](https://deekendra-portfolio.vercel.app)
