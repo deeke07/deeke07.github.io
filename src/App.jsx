@@ -813,7 +813,7 @@ If you need an Android developer who owns the entire build — architecture, dev
           className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-medium text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
         >
           <ChartNoAxesCombined size={14} />
-          Works
+          Projects
         </a>
         <a
           href="#contact"
