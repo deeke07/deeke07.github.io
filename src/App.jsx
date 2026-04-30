@@ -23,107 +23,7 @@ import {
   X,
 } from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
-import { projectItems } from './data/portfolioData'
-
-const experienceItems = [
-  {
-    role: 'Android Developer',
-    period: 'Nov 2023 – Mar 2026',
-    company: 'AX Capital (Dubai, UAE - Remote)',
-    summary:
-      'Developed multiple internal production applications for real estate agents and business operations.',
-    points: [
-      'Built property listing, lead management, contacts, and calendar systems to improve agent productivity',
-      'Implemented call tracking and recording with Accessibility Services for Android 9+ constraints',
-      'Delivered live location tracking via FusedLocationProviderClient and Foreground Service',
-      'Developed real-time WhatsApp-like chat with listing sharing and read receipts',
-      'Architected apps with MVVM + Clean Architecture, Hilt, Room, and StateFlow',
-    ],
-  },
-  {
-    role: 'Flutter Developer',
-    period: 'Jan 2022 – Feb 2023',
-    company: 'Siliconkraft Tech Pvt Ltd (Bangalore, India)',
-    summary:
-      'Built cross-platform iOS and Android e-commerce white-label applications using Flutter and Dart.',
-    points: [
-      'Created reusable feature modules for multi-client business requirements',
-      'Maintained technical specifications and documentation across lifecycle',
-      'Collaborated with design, QA, and product teams for quality delivery',
-    ],
-  },
-  {
-    role: 'Android Developer',
-    period: 'Jul 2021 – Jan 2022',
-    company: 'Sachirva Technology Solution (Bangalore, India)',
-    summary:
-      'Contributed across planning, development, optimization, and collaboration for Android products.',
-    points: [
-      'Wrote efficient Kotlin code using MVVM best practices',
-      'Worked with QA, product, design, and support teams across all phases',
-      'Improved app performance, stability, and user experience',
-    ],
-  },
-  {
-    role: 'Android Developer',
-    period: 'Aug 2018 – Jul 2021',
-    company: 'Fitnytech Technology (Bangalore, India)',
-    summary:
-      'Built and maintained fitness and education apps used by thousands of users.',
-    points: [
-      'Delivered multiple client apps with full development lifecycle ownership',
-      'Used Kotlin and Java for production Android applications',
-      'Reduced crash rates and optimized memory usage',
-    ],
-  },
-  {
-    role: 'Android Developer Intern',
-    period: 'Jan 2018 – Jun 2018',
-    company: 'Jain Software (Raipur, India)',
-    summary:
-      'Assisted in Android feature implementation under senior developer mentorship.',
-    points: [
-      'Supported app development and debugging tasks',
-      'Contributed to module implementation and testing',
-    ],
-  },
-]
-
-const educationItems = [
-  {
-    degree: 'Bachelor of Engineering (B.E.)',
-    period: '2014 – 2018',
-    institute: 'CSVTU University',
-    details: 'Focused on software engineering fundamentals and core computer science.',
-  },
-]
-
-const skillScores = [
-  { name: 'Android', value: 90 },
-  { name: 'Java', value: 80 },
-  { name: 'Kotlin', value: 90 },
-  { name: 'Flutter', value: 85 },
-  { name: 'Scrum', value: 85 },
-  { name: 'Git', value: 85 },
-  { name: 'Agile', value: 80 },
-  { name: 'CI/CD', value: 80 },
-  { name: 'Clean Architecture', value: 90 },
-]
-
-const blogItems = [
-  {
-    title: 'Building Scalable Real-Time Chat on Android',
-    tag: 'ANDROID / CHAT / ARCHITECTURE',
-  },
-  {
-    title: 'Compose Performance Checklist for Production Apps',
-    tag: 'JETPACK COMPOSE / PERFORMANCE',
-  },
-  {
-    title: 'Designing Reliable Offline-First Mobile Features',
-    tag: 'MOBILE ARCHITECTURE / OFFLINE',
-  },
-]
+import { projectItems, experienceItems, educationItems, skillScores, blogItems } from './data/portfolioData'
 
 function App() {
   const resumeUrl = '/Deekendra_Resume.pdf'
@@ -303,14 +203,12 @@ function App() {
             </p>
 
             <p className="mt-5 text-sm font-semibold uppercase tracking-[0.22em] text-slate-300">
-              Hi, I&apos;m Deekendra Kumar!
+              Hi, I&apos;m Deekendra Kumar! <br/><br/>
             </p>
             <h1 className="mt-3 text-2xl font-extrabold leading-[1.08] text-white sm:text-4xl md:text-[5.2rem]">
-              <span className="text-indigo-300">{'{'}</span>
-              <span className="mx-2">Senior Mobile</span>
-              <br />
-              <span className="mx-2">Engineer</span>
-              <span className="text-indigo-300">{'}'}</span>
+              <span className="text-indigo-300">{'{ '}</span>
+              <span className="mx-2">Senior Mobile Engineer</span>
+              <span className="text-indigo-300">{' }'}</span>
             </h1>
             <p className="mt-7 max-w-3xl text-sm uppercase tracking-[0.12em] text-slate-300 sm:text-[15px] sm:leading-8">
               Leading-edge mobile application development with a focus on scalable architecture,
@@ -395,9 +293,13 @@ function App() {
                 />
               </div>
               <p className="text-left text-sm leading-relaxed text-slate-300 sm:text-lg">
-                Expert Android Developer with 6+ years of professional experience. Specializing in
-                high-performance mobile architectures, I build and scale production applications
-                while maintaining strong reliability, performance, and long-term maintainability.
+              I build Android apps that work in the real world — fast, reliable, and built to scale. <br/><br/>
+
+Over 7 years, I've delivered production apps for real estate, healthcare, fitness, and e-commerce businesses — including Play Store titles with 100K+ downloads and internal platforms serving 1,000+ daily users.<br/><br/>
+
+My most complex project: a 5-app internal suite for AX Capital (Dubai's top real estate brokerage) — built alone, from architecture to deployment. It included real-time chat, live GPS tracking, call recording, and a full CRM. All in production, all running daily.<br/><br/>
+
+If you need an Android developer who owns the entire build — architecture, development, testing, and Play Store release — I'm available now.
               </p>
             </div>
           </div>
