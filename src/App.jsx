@@ -94,7 +94,7 @@ function App() {
           }
         })
       },
-      { threshold: 0.15 },
+      { threshold: 0.05, rootMargin: '0px 0px 50px 0px' },
     )
 
     const revealNodes = document.querySelectorAll('.reveal')
@@ -408,51 +408,56 @@ If you need an Android developer who owns the entire build — architecture, dev
           </div>
 
           <div className="mt-8 space-y-5">
-            {experienceItems.map((item, index) => (
-              <article
-                key={item.company}
-                className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-50 p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-6 dark:border-slate-800 dark:bg-slate-950/60"
-              >
-                <span className="absolute right-3 top-3 rounded-full bg-slate-900/95 px-2 py-1 text-xs uppercase tracking-[0.2em] text-slate-100 sm:right-5 sm:top-5 sm:px-3 dark:bg-slate-100/10 dark:text-slate-200">
-                  {item.period}
-                </span>
-                <div className="mb-4 flex flex-col gap-3 sm:mb-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.21em] text-indigo-600 dark:text-indigo-400">
-                      {item.role}
-                    </p>
-                    <h4 className="mt-1 text-lg font-semibold text-slate-900 sm:mt-2 sm:text-2xl dark:text-white">
-                      {item.company}
-                    </h4>
+            {experienceItems && experienceItems.length > 0 ? (
+              experienceItems.map((item, index) => (
+                <article
+                  key={item.company}
+                  className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-50 p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-6 dark:border-slate-800 dark:bg-slate-950/60"
+                >
+                  <span className="absolute right-3 top-3 rounded-full bg-slate-900/95 px-2 py-1 text-xs uppercase tracking-[0.2em] text-slate-100 sm:right-5 sm:top-5 sm:px-3 dark:bg-slate-100/10 dark:text-slate-200">
+                    {item.period}
+                  </span>
+                  <div className="mb-4 flex flex-col gap-3 sm:mb-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.21em] text-indigo-600 dark:text-indigo-400">
+                        {item.role}
+                      </p>
+                      <h4 className="mt-1 text-lg font-semibold text-slate-900 sm:mt-2 sm:text-2xl dark:text-white">
+                        {item.company}
+                      </h4>
+                    </div>
+                    
                   </div>
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-3xl bg-indigo-500/10 text-indigo-600 sm:h-12 sm:w-12 dark:bg-indigo-400/10 dark:text-indigo-300">
-                    <CheckCircle2 size={20} />
-                  </div>
-                </div>
-                <p className="text-sm leading-7 text-slate-600 dark:text-slate-400">{item.summary}</p>
-                <ul className="mt-5 space-y-3">
-                  {item.points.map((point) => (
-                    <li key={point} className="flex gap-3 text-sm text-slate-600 dark:text-slate-400">
-                      <span className="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-                {item.techStack && (
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {item.techStack.map((tech) => (
-                      <span key={tech} className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-200">
-                        {tech}
-                      </span>
+                  <p className="text-sm leading-7 text-slate-600 dark:text-slate-400">{item.summary}</p>
+                  <ul className="mt-5 space-y-3">
+                    {item.points.map((point) => (
+                      <li key={point} className="flex gap-3 text-sm text-slate-600 dark:text-slate-400">
+                        <span className="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
+                        <span>{point}</span>
+                      </li>
                     ))}
+                  </ul>
+                  {item.techStack && (
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {item.techStack.map((tech) => (
+                        <span key={tech} className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-200">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                    <span className="inline-flex h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
+                    {index === 0 ? 'Most recent role' : 'Previous role'}
                   </div>
-                )}
-                <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
-                  <span className="inline-flex h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
-                  {index === 0 ? 'Most recent role' : 'Previous role'}
-                </div>
-              </article>
-            ))}
+                </article>
+              ))
+            ) : (
+              <div className="flex w-full animate-pulse flex-col items-center justify-center rounded-3xl border border-slate-200 bg-slate-50 py-20 dark:border-slate-800 dark:bg-slate-900/50">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600 dark:border-indigo-500/20 dark:border-t-indigo-400"></div>
+                <p className="mt-4 text-sm font-medium text-slate-500 dark:text-slate-400">Loading experience...</p>
+              </div>
+            )}
           </div>
 
           <div className="mt-10 rounded-[2rem] border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/60">
@@ -519,81 +524,87 @@ If you need an Android developer who owns the entire build — architecture, dev
             ))}
           </div>
 
-          {/* Projects Grid - Modern Card Layout */}
           <div className="mt-6 grid gap-3 sm:mt-8 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredProjects.map((project, index) => (
-              <article
-                key={project.title}
-                onClick={() => {
-                  setSelectedProject(project)
-                  setCarouselIndex(0)
-                  setIsProjectModalOpen(true)
-                }}
-                className="group relative cursor-pointer overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20 dark:border-slate-800 dark:bg-slate-950"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {/* Image Container */}
-                <div className="relative h-28 overflow-hidden bg-slate-100 sm:h-40 lg:h-48 dark:bg-slate-900">
-                  {project.image ? (
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800">
-                      <ChartNoAxesCombined size={40} className="text-slate-400" />
-                    </div>
-                  )}
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                  
-                  {/* Category Badge */}
-                  <div className="absolute left-4 top-4">
-                    <span className="rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-slate-900 shadow-lg">
-                      {project.category}
-                    </span>
-                  </div>
-                  
-                  {/* View Details Icon */}
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 translate-x-4 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-lg">
-                      <ExternalLink size={18} className="text-indigo-600" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-3 sm:p-5">
-                  <h3 className="text-base font-bold text-slate-900 transition-colors group-hover:text-indigo-600 sm:text-lg dark:text-white dark:group-hover:text-indigo-400">
-                    {project.title}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                    {project.description}
-                  </p>
-                  
-                  {/* Tech Stack Tags */}
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {project.stack.slice(0, 3).map((tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-slate-600 dark:bg-slate-800 dark:text-slate-400"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                    {project.stack.length > 3 && (
-                      <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-slate-500 dark:bg-slate-800 dark:text-slate-500">
-                        +{project.stack.length - 3}
-                      </span>
+            {filteredProjects && filteredProjects.length > 0 ? (
+              filteredProjects.map((project, index) => (
+                <article
+                  key={project.title}
+                  onClick={() => {
+                    setSelectedProject(project)
+                    setCarouselIndex(0)
+                    setIsProjectModalOpen(true)
+                  }}
+                  className="group relative cursor-pointer overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20 dark:border-slate-800 dark:bg-slate-950"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  {/* Image Container */}
+                  <div className="relative h-28 overflow-hidden bg-slate-100 sm:h-40 lg:h-48 dark:bg-slate-900">
+                    {project.image ? (
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800">
+                        <ChartNoAxesCombined size={40} className="text-slate-400" />
+                      </div>
                     )}
+                    {/* Overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                    
+                    {/* Category Badge */}
+                    <div className="absolute left-4 top-4">
+                      <span className="rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-slate-900 shadow-lg">
+                        {project.category}
+                      </span>
+                    </div>
+                    
+                    {/* View Details Icon */}
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 translate-x-4 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-lg">
+                        <ExternalLink size={18} className="text-indigo-600" />
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                {/* Bottom accent line */}
-                <div className="h-1 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-              </article>
-            ))}
+                  {/* Content */}
+                  <div className="p-3 sm:p-5">
+                    <h3 className="text-base font-bold text-slate-900 transition-colors group-hover:text-indigo-600 sm:text-lg dark:text-white dark:group-hover:text-indigo-400">
+                      {project.title}
+                    </h3>
+                    <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                      {project.description}
+                    </p>
+                    
+                    {/* Tech Stack Tags */}
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {project.stack.slice(0, 3).map((tech) => (
+                        <span
+                          key={tech}
+                          className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.stack.length > 3 && (
+                        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-slate-500 dark:bg-slate-800 dark:text-slate-500">
+                          +{project.stack.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Bottom accent line */}
+                  <div className="h-1 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                </article>
+              ))
+            ) : (
+              <div className="col-span-full flex w-full animate-pulse flex-col items-center justify-center rounded-3xl border border-slate-200 bg-slate-50 py-20 dark:border-slate-800 dark:bg-slate-900/50">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600 dark:border-indigo-500/20 dark:border-t-indigo-400"></div>
+                <p className="mt-4 text-sm font-medium text-slate-500 dark:text-slate-400">Loading projects...</p>
+              </div>
+            )}
           </div>
 
           {/* View All Projects Button */}
