@@ -494,14 +494,14 @@ function App() {
                 Experience
               </p>
               <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
-                Lead Mobile App Developer Credentials
+                7+ Years of Mobile App Expertise
               </h2>
               <p className="mt-3 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
-                I design and ship Android-first solutions that improve agent workflows, manage high-volume data, and keep user experiences fast and reliable.
+                I build Android apps that work in the real world — fast, reliable, and built to scale. Over 7 years, I've delivered production apps for real estate, healthcare, fitness, and e-commerce businesses — including Play Store titles with 100K+ downloads and internal platforms serving 1,000+ daily users.
               </p>
             </div>
             <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-200">
-              5+ years building apps for high-growth teams
+              Since 2018
             </div>
           </div>
 
@@ -536,6 +536,15 @@ function App() {
                     </li>
                   ))}
                 </ul>
+                {item.techStack && (
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {item.techStack.map((tech) => (
+                      <span key={tech} className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-200">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
                   <span className="inline-flex h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
                   {index === 0 ? 'Most recent role' : 'Previous role'}
